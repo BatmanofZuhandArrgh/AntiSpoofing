@@ -11,6 +11,8 @@ from evaluate import *
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
+import os
+import pickle
 
 
 class ImageQualityAssessmentPAD():
@@ -119,6 +121,15 @@ class ImageQualityAssessmentPAD():
         clf.fit(X, y)
         
         self.clf = clf
+        
+        # save the model to disk
+        filename = f'{typeOfClassifier}_antispoofing_model.sav'
+        
+        if not os.path.exists('model'):
+            os.makedirs('model')
+            
+        pickle.dump(clf, open(f'model/{filename}', 'wb'))
+        
         return clf
         
     def predict(self,
@@ -132,4 +143,8 @@ class ImageQualityAssessmentPAD():
         
         y_pred = self.clf.predict(x_test)
         return y_pred
+    
+    
+    def clr(self):
+        return self.clf
         
